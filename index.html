@@ -129,6 +129,11 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .yr-btn:hover{border-color:var(--blue);color:var(--blue)}
 .yr-btn.on{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:700}
 
+/* ─ 商品ページ遷移アイコン ─ */
+.item-link-ico{display:inline-block;width:16px;height:16px;line-height:14px;text-align:center;border:1px solid var(--blue);border-radius:3px;background:var(--blue-l);color:var(--blue);font-size:10px;font-weight:700;text-decoration:none;margin-left:6px;cursor:pointer;vertical-align:middle;font-family:'Noto Sans JP',sans-serif;transition:all .12s;box-sizing:border-box;flex-shrink:0}
+.item-link-ico:hover{background:var(--blue);color:#fff;transform:translateY(-1px);box-shadow:0 2px 4px rgba(20,98,212,.25)}
+.item-link-ico:active{transform:translateY(0)}
+
 /* ─ Range Slider ─ */
 
 /* ─ デュアルハンドル レンジスライダー ─ */
@@ -2251,6 +2256,73 @@ function mk(id,cfg){if(CHS[id])CHS[id].destroy();try{CHS[id]=new Chart(document.
 const YC={'2023':'#F59E0B','2024':'#EF4444','2025':'#06B6D4','2026':'#10B981'};
 const MONTHS=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
 
+/* ── 商品ページ遷移リンク（楽天ショップURL） ── */
+const SHOP_URL_KEY='cs_rakuten_shop_base_url';
+function _normalizeShopBase(u){
+  const v=(u||'').trim();
+  if(!v)return '';
+  return v.replace(/\/+$/,'');
+}
+function _getShopBase(){
+  try{
+    const saved=localStorage.getItem(SHOP_URL_KEY);
+    if(saved&&saved.trim())return _normalizeShopBase(saved);
+  }catch(e){}
+  const a=document.getElementById('prod-shop-url')?.value;
+  if(a&&a.trim())return _normalizeShopBase(a);
+  const b=document.getElementById('ri-shop-url')?.value;
+  if(b&&b.trim())return _normalizeShopBase(b);
+  return '';
+}
+function _setShopBase(url){
+  const v=_normalizeShopBase(url);
+  try{
+    if(v)localStorage.setItem(SHOP_URL_KEY,v);
+    else localStorage.removeItem(SHOP_URL_KEY);
+  }catch(e){}
+  ['prod-shop-url','ri-shop-url'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&el.value!==v)el.value=v;
+  });
+}
+function _idLink(id){
+  if(id===undefined||id===null||id==='')return '';
+  const sId=String(id);
+  const safeText=sId.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const base=_getShopBase();
+  if(!base)return safeText;
+  const url=base+'/'+encodeURIComponent(sId)+'/';
+  return safeText+'<a href="'+url.replace(/"/g,'&quot;')+'" target="_blank" rel="noopener noreferrer" class="item-link-ico" title="楽天商品ページを別タブで開く" onclick="event.stopPropagation()">↗</a>';
+}
+function _refreshAllProdTables(){
+  const fns=['renderProd','renderRppItem','renderRppItemType','renderRppKw','renderRppKw23','renderP24','renderP25','_p26RenderTable'];
+  fns.forEach(fn=>{try{if(typeof window[fn]==='function')window[fn]();}catch(e){}});
+}
+function _initShopUrlSync(){
+  let saved='';
+  try{saved=localStorage.getItem(SHOP_URL_KEY)||'';}catch(e){}
+  if(saved){
+    ['prod-shop-url','ri-shop-url'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el&&!el.value)el.value=saved;
+    });
+  }
+  ['prod-shop-url','ri-shop-url'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el||el.dataset.shopSyncBound)return;
+    el.dataset.shopSyncBound='1';
+    el.addEventListener('input',function(){
+      _setShopBase(el.value);
+      _refreshAllProdTables();
+    });
+  });
+}
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',_initShopUrlSync);
+}else{
+  _initShopUrlSync();
+}
+
 /* ── helpers ── */
 function getYears(arr,dateKey='日付'){return[...new Set(arr.map(r=>r[dateKey].slice(0,4)))].sort();}
 function byYear(arr,dateKey='日付'){
@@ -3612,7 +3684,7 @@ function renderRppItem(){
     const safeId=p.管理番号.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
     return`<tr class="prod-row${selectedRppItemId===p.管理番号?' ri-sel':''}"
         onclick="selectRppItem('${safeId}',this)">
-      <td class="mono" style="font-size:13px;font-weight:600;position:sticky;left:0;background:#fff">${(()=>{const su=document.getElementById('ri-shop-url')?.value?.trim();const base=su?su.replace(/\/$/,''):'';return base?`<a href="${base}/${p.管理番号}/" target="_blank" rel="noopener" title="楽天商品ページを開く" style="color:var(--blue);text-decoration:none" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${p.管理番号}</a>`:`${p.管理番号}`;})()}</td>
+      <td class="mono" style="font-size:13px;font-weight:600;position:sticky;left:0;background:#fff">${_idLink(p.管理番号)}</td>
       <td class="r mono" style="${GL2};font-size:13px">${N(p.クリック数)}</td>
       <td class="r mono" style="font-size:12px;color:var(--text3)">${y?N(y.クリック数):'—'}</td>
       <td class="r" style="font-size:12px">${fmtPct(ratio(p.クリック数,y?.クリック数))}</td>
@@ -3995,7 +4067,7 @@ function _paTable(tbodyId, base, cmp){
     const safek=k.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
     const GL2='border-left:2px solid rgba(0,0,0,.08)';
     return`<tr class="prod-row${isSel?' ri-sel':''}" onclick="selectProdItem('${safek}',this)" style="cursor:pointer">
-      <td class="mono" style="font-size:12px;position:sticky;left:0;background:#fff">${(()=>{const su=document.getElementById('prod-shop-url')?.value?.trim();const base=su?su.replace(/\/$/,''):'';return base?`<a href="${base}/${k}/" target="_blank" rel="noopener" title="楽天商品ページを開く" style="color:var(--blue);text-decoration:none" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${k}</a>`:`${k}`;})()}</td>
+      <td class="mono" style="font-size:12px;position:sticky;left:0;background:#fff">${_idLink(k)}</td>
       <td class="r mono" style="${GL2};color:var(--blue);font-weight:700">${N(b.売上)}</td>
       <td class="r mono">${N(c.売上)}</td>
       <td class="r" style="font-size:11px">${pctCmp(b.売上,c.売上)}</td>
@@ -4107,7 +4179,7 @@ function _renderDormantProds(baseYM, cmpYM){
     </button>`;
 
   tb.innerHTML=dormant.map(r=>`<tr>
-    <td class="mono" style="font-size:11px;font-weight:600;color:var(--text)">${r.id}</td>
+    <td class="mono" style="font-size:11px;font-weight:600;color:var(--text)">${_idLink(r.id)}</td>
     <td class="r mono" style="color:var(--text2)">¥${N(r.cmpSl)}</td>
     <td class="r mono">${N(r.cmpOrders)}</td>
     <td class="r mono" style="color:var(--red);font-weight:700">¥0</td>
@@ -4947,7 +5019,7 @@ function renderRppKw(){
       const safeK=p.k.replace(/\\/g,'\\\\').replace(/\'/g,"\\'");
       rows.push('<tr class="prod-row'+(selectedRppKwId===p.k?' ri-sel':'')+'"'
         +' onclick="selectRppKw(\''+safeK+'\',this)">'
-        +'<td class="mono" style="font-size:11px;position:sticky;left:0;background:#fff">'+( p.itemId||'—')+'</td>'
+        +'<td class="mono" style="font-size:11px;position:sticky;left:0;background:#fff">'+(p.itemId?_idLink(p.itemId):'—')+'</td>'
         +'<td class="mono" style="font-size:11px">'+p.kw+'</td>'
       +'<td class="r mono" style="'+GL3+';font-size:13px">'+N_kw(p.cl)+'</td><td class="r mono" style="font-size:12px;color:var(--text3)">'+(y?N_kw(y.cl):'—')+'</td><td class="r" style="font-size:12px">'+fP(ratio(p.cl,y&&y.cl))+'</td>'
       +'<td class="r mono" style="'+GL3+';font-size:13px">'+P_kw(p.CVR)+'</td><td class="r mono" style="font-size:12px;color:var(--text3)">'+(y?P_kw(y.CVR):'—')+'</td><td class="r" style="font-size:12px">'+fP(ratio(p.CVR,y&&y.CVR))+'</td>'
@@ -6608,7 +6680,7 @@ function renderRppItemType(){
       const btop=ti===0&&pi>0?'border-top:2px solid var(--border)':'';
       rows.push(`<tr class="prod-row${isSel?' ri-sel':''}" style="cursor:pointer;${fw}${btop?';'+btop:''}"
         onclick="selectRppItemType('${safeProd}','${safeLabel}',this)">
-        <td class="mono" style="font-size:11px;position:sticky;left:0;background:${rowBg};${fw};color:${ti===0?'var(--text)':'var(--text3)'}">${prodId}</td>
+        <td class="mono" style="font-size:11px;position:sticky;left:0;background:${rowBg};${fw};color:${ti===0?'var(--text)':'var(--text3)'}">${ti===0?_idLink(prodId):prodId}</td>
         <td style="font-size:11px"><span style="color:${typeColors[label]||'#333'};font-weight:600">${label}</span></td>
         <td class="r mono" style="${GL}">${N(d.クリック数)}</td>
         <td class="r mono">${fP(d.CTR)}</td>
@@ -7199,7 +7271,7 @@ function renderRppKw23(){
     const safeK=p.k.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
     const color=isBranded?'#F59E0B':'#3B82F6',label=isBranded?'指名':'一般',sel=(_rk23SelId===p.k);
     return '<tr class="rk23-row'+(sel?' ri-sel':'')+'" onclick="selectRkRow23(\''+safeK+'\',this)" style="cursor:pointer">'
-      +'<td class="mono" style="font-size:11px;position:sticky;left:0;background:#fff;z-index:2">'+(p.id||'—')+'</td>'
+      +'<td class="mono" style="font-size:11px;position:sticky;left:0;background:#fff;z-index:2">'+(p.id?_idLink(p.id):'—')+'</td>'
       +'<td class="mono" style="font-size:11px">'+p.kw+'</td>'
       +'<td style="text-align:center"><span style="display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;background:'+color+'22;color:'+color+'">'+label+'</span></td>'
       +_rk23Cells(p,y,GL3,N,P,fP,ratio);
@@ -7483,7 +7555,7 @@ function renderP24(){
       const natColor=r.naturalRate>=70?'var(--green)':r.naturalRate>=40?'var(--text)':'var(--red)';
       const roasColor=r.roas>=300?'var(--green)':r.roas>0?'var(--red)':'var(--text3)';
       return`<tr>
-        <td class="mono" style="font-size:11px;font-weight:600">${r.id}</td>
+        <td class="mono" style="font-size:11px;font-weight:600">${_idLink(r.id)}</td>
         <td class="r mono">${N(r.acc)}</td>
         <td class="r mono" style="color:var(--blue);font-weight:600">${N(r.rppCl)}</td>
         <td class="r mono" style="color:#10B981;font-weight:600">${N(r.natural)}</td>
@@ -7602,7 +7674,7 @@ function renderP25(){
   const tb=document.getElementById('tbl-p25-body');
   if(tb){
     tb.innerHTML=prods.map(p=>`<tr>
-      <td class="mono" style="font-size:11px;font-weight:600">${p.id}</td>
+      <td class="mono" style="font-size:11px;font-weight:600">${_idLink(p.id)}</td>
       <td class="r mono" style="color:var(--blue);font-weight:700">${N(p.rv)}</td>
       <td class="r mono" style="color:${p.cvr>=3?'var(--green)':p.cvr>=1?'var(--text)':'var(--red)'}">${p.cvr.toFixed(2)}%</td>
       <td class="r mono">${N(Math.round(p.avgAcc))}</td>
@@ -7698,7 +7770,7 @@ function _p26RenderTable(){
   const qColor={A:'#10B981',B:'#3B82F6',C:'#F59E0B',D:'#EF4444'};
   tb.innerHTML=sorted.map(v=>`<tr>
     <td><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;background:${qColor[v.quad]}22;color:${qColor[v.quad]}">${qLabel[v.quad]}</span></td>
-    <td class="mono" style="font-size:11px">${v.id}</td>
+    <td class="mono" style="font-size:11px">${_idLink(v.id)}</td>
     <td class="mono" style="font-size:11px">${v.kw}</td>
     <td class="r mono" style="color:${v.roas>=500?'var(--green)':'var(--red)'};font-weight:700">${Math.round(v.roas)}%</td>
     <td class="r mono" style="color:var(--blue);font-weight:600">¥${N(v.sl)}</td>
