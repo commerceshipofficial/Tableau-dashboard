@@ -129,10 +129,19 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .yr-btn:hover{border-color:var(--blue);color:var(--blue)}
 .yr-btn.on{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:700}
 
-/* ─ 商品ページ遷移アイコン ─ */
-.item-link-ico{display:inline-block;width:16px;height:16px;line-height:14px;text-align:center;border:1px solid var(--blue);border-radius:3px;background:var(--blue-l);color:var(--blue);font-size:10px;font-weight:700;text-decoration:none;margin-left:6px;cursor:pointer;vertical-align:middle;font-family:'Noto Sans JP',sans-serif;transition:all .12s;box-sizing:border-box;flex-shrink:0}
-.item-link-ico:hover{background:var(--blue);color:#fff;transform:translateY(-1px);box-shadow:0 2px 4px rgba(20,98,212,.25)}
-.item-link-ico:active{transform:translateY(0)}
+/* ─ 商品ページ遷移ボタン（独立列・横スクロール固定） ─ */
+.item-link-col-cell{padding:2px 8px!important;text-align:center;width:1%;white-space:nowrap;background:#fff;position:sticky!important;left:var(--id-col-w,140px);z-index:2;box-shadow:1px 0 0 rgba(20,98,212,.06)}
+.dtbl tbody tr:nth-child(even) td.item-link-col-cell{background:#F7F9FD}
+.dtbl tbody tr:hover td.item-link-col-cell{background:var(--blue-lt)}
+.dtbl tbody tr.ri-sel td.item-link-col-cell{background:var(--blue-l)}
+.item-link-col-h{text-align:center!important;width:1%;white-space:nowrap;font-size:10px!important;letter-spacing:.05em;position:sticky!important;left:var(--id-col-w,140px)!important;z-index:4!important;background:var(--blue)!important}
+.item-link-col-btn{display:inline-flex;align-items:center;justify-content:center;width:24px;height:20px;background:#fff;color:var(--blue);border:1px solid #C5D7F5;border-radius:5px;text-decoration:none;cursor:pointer;transition:all .15s ease;vertical-align:middle;box-shadow:0 1px 1px rgba(20,98,212,.04);box-sizing:border-box}
+.item-link-col-btn svg{width:11px;height:11px;transition:transform .15s ease}
+.item-link-col-btn:hover{background:linear-gradient(180deg,#1F73E0 0%,#1462D4 100%);color:#fff;border-color:var(--blue);box-shadow:0 2px 6px rgba(20,98,212,.28);transform:translateY(-1px)}
+.item-link-col-btn:hover svg{transform:translate(1px,-1px)}
+.item-link-col-btn:active{transform:translateY(0);box-shadow:0 1px 2px rgba(20,98,212,.2) inset}
+.item-link-col-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+tr:hover .item-link-col-btn{border-color:#A8C2EC;background:#F8FBFF}
 
 /* ─ 店舗ID 複合入力 ─ */
 .shop-id-wrap{display:inline-flex;align-items:stretch;border:1px solid var(--border);border-radius:5px;background:#fff;overflow:hidden;font-size:11px;line-height:1.4}
@@ -551,6 +560,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
       <table class="dtbl">
         <thead><tr>
           <th style="position:sticky;top:0;z-index:3;min-width:160px">商品管理番号</th>
+          <th class="item-link-col-h" style="position:sticky;top:0;z-index:3">商品ページ</th>
           <th class="r" style="position:sticky;top:0;z-index:3">比較年月 売上</th>
           <th class="r" style="position:sticky;top:0;z-index:3">比較年月 売上件数</th>
           <th class="r" style="position:sticky;top:0;z-index:3;color:#EF4444">基準年月 売上</th>
@@ -1372,6 +1382,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
       <table class="dtbl" id="tbl-p24">
         <thead><tr>
           <th style="position:sticky;top:0;z-index:3;min-width:140px">商品管理番号</th>
+          <th class="item-link-col-h" style="position:sticky;top:0;z-index:3">商品ページ</th>
           <th class="r" style="position:sticky;top:0;z-index:3">全体アクセス</th>
           <th class="r" style="position:sticky;top:0;z-index:3;background:#1462D4">RPPクリック</th>
           <th class="r" style="position:sticky;top:0;z-index:3;background:#0D7D57;color:#fff">自然流入</th>
@@ -1450,6 +1461,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
       <table class="dtbl" id="tbl-p25">
         <thead><tr>
           <th style="position:sticky;top:0;z-index:3">商品管理番号</th>
+          <th class="item-link-col-h" style="position:sticky;top:0;z-index:3">商品ページ</th>
           <th class="r" style="position:sticky;top:0;z-index:3">累計レビュー数</th>
           <th class="r" style="position:sticky;top:0;z-index:3">平均CVR</th>
           <th class="r" style="position:sticky;top:0;z-index:3">平均アクセス/月</th>
@@ -1538,6 +1550,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
         <thead><tr>
           <th style="position:sticky;top:0;z-index:3">象限</th>
           <th style="position:sticky;top:0;z-index:3">商品管理番号</th>
+          <th class="item-link-col-h" style="position:sticky;top:0;z-index:3">商品ページ</th>
           <th style="position:sticky;top:0;z-index:3">キーワード</th>
           <th class="r" style="position:sticky;top:0;z-index:3">ROAS</th>
           <th class="r" style="position:sticky;top:0;z-index:3">売上(720h)</th>
@@ -1591,6 +1604,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
         <thead>
           <tr style="background:var(--blue);color:#fff;position:sticky;top:0;z-index:3">
             <th style="text-align:left;position:sticky;left:0;z-index:5;background:var(--blue)">商品管理番号</th>
+            <th class="item-link-col-h">商品ページ</th>
             <th style="text-align:left">入札種別</th>
             <th class="r">クリック数</th>
             <th class="r">CTR%</th>
@@ -2305,16 +2319,44 @@ function _setShopBase(input){
 }
 function _idLink(id){
   if(id===undefined||id===null||id==='')return '';
+  return String(id).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function _idLinkCol(id){
+  if(id===undefined||id===null||id==='')return '<td class="item-link-col-cell"></td>';
   const sId=String(id);
-  const safeText=sId.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const base=_getShopBase();
-  if(!base)return safeText;
+  if(!base)return '<td class="item-link-col-cell"></td>';
   const url=base+'/'+encodeURIComponent(sId)+'/';
-  return safeText+'<a href="'+url.replace(/"/g,'&quot;')+'" target="_blank" rel="noopener noreferrer" class="item-link-ico" title="楽天商品ページを別タブで開く" onclick="event.stopPropagation()">↗</a>';
+  return '<td class="item-link-col-cell"><a href="'+url.replace(/"/g,'&quot;')+'" target="_blank" rel="noopener noreferrer" class="item-link-col-btn" title="楽天商品ページを別タブで開く" onclick="event.stopPropagation()" aria-label="楽天商品ページを開く"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></td>';
 }
 function _refreshAllProdTables(){
   const fns=['renderProd','renderRppItem','renderRppItemType','renderRppKw','renderRppKw23','renderP24','renderP25','_p26RenderTable'];
   fns.forEach(fn=>{try{if(typeof window[fn]==='function')window[fn]();}catch(e){}});
+}
+function _applyStickyLinkOffsets(){
+  document.querySelectorAll('.dtbl').forEach(tbl=>{
+    if(!tbl.querySelector('.item-link-col-h')&&!tbl.querySelector('.item-link-col-cell'))return;
+    const firstTh=tbl.querySelector('thead tr:first-child > th:first-child');
+    const firstTd=tbl.querySelector('tbody tr:first-child > td:first-child');
+    const w=Math.max(firstTh?.offsetWidth||0, firstTd?.offsetWidth||0);
+    if(w>0)tbl.style.setProperty('--id-col-w',w+'px');
+  });
+}
+function _setupStickyLinkObserver(){
+  if(window._stickyLinkObserverInited)return;
+  window._stickyLinkObserverInited=true;
+  const apply=()=>requestAnimationFrame(_applyStickyLinkOffsets);
+  apply();
+  setTimeout(apply,300);setTimeout(apply,1000);
+  window.addEventListener('resize',apply);
+  if(typeof MutationObserver!=='undefined'){
+    const mo=new MutationObserver(apply);
+    document.querySelectorAll('.dtbl tbody, .dtbl thead').forEach(el=>mo.observe(el,{childList:true,subtree:true,characterData:true}));
+  }
+  if(typeof ResizeObserver!=='undefined'){
+    const ro=new ResizeObserver(apply);
+    document.querySelectorAll('.dtbl thead tr:first-child > th:first-child').forEach(th=>ro.observe(th));
+  }
 }
 function _initShopUrlSync(){
   let saved='';
@@ -2349,9 +2391,9 @@ function _initShopUrlSync(){
   });
 }
 if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded',_initShopUrlSync);
+  document.addEventListener('DOMContentLoaded',function(){_initShopUrlSync();_setupStickyLinkObserver();});
 }else{
-  _initShopUrlSync();
+  _initShopUrlSync();_setupStickyLinkObserver();
 }
 
 /* ── helpers ── */
@@ -3629,7 +3671,7 @@ function renderRppItem(){
   const items=D.rppItem||[];
   if(!items.length){
     document.getElementById('tbl-rpp-item').innerHTML=
-      '<tr><td colspan="25" style="text-align:center;color:var(--text3);padding:28px">RPP Itemシートを含むXLSXを読み込んでください</td></tr>';
+      '<tr><td colspan="26" style="text-align:center;color:var(--text3);padding:28px">RPP Itemシートを含むXLSXを読み込んでください</td></tr>';
       return;
   }
 
@@ -3653,6 +3695,7 @@ function renderRppItem(){
   const _GH='border-bottom:1px solid rgba(255,255,255,.25);text-align:center';
   if(_rh1)_rh1.innerHTML=`
     <th rowspan="2" style="vertical-align:middle;position:sticky;left:0;z-index:5;background:var(--blue)">商品管理番号</th>
+    <th class="item-link-col-h" rowspan="2" style="vertical-align:middle;background:var(--blue)">商品ページ</th>
     <th colspan="3" style="${_GH};${_GL}">クリック数</th>
     <th colspan="3" style="${_GH};${_GL}">CVR</th>
     <th colspan="3" style="${_GH};${_GL}">CPC</th>
@@ -3716,6 +3759,7 @@ function renderRppItem(){
     return`<tr class="prod-row${selectedRppItemId===p.管理番号?' ri-sel':''}"
         onclick="selectRppItem('${safeId}',this)">
       <td class="mono" style="font-size:13px;font-weight:600;position:sticky;left:0;background:#fff">${_idLink(p.管理番号)}</td>
+      ${_idLinkCol(p.管理番号)}
       <td class="r mono" style="${GL2};font-size:13px">${N(p.クリック数)}</td>
       <td class="r mono" style="font-size:12px;color:var(--text3)">${y?N(y.クリック数):'—'}</td>
       <td class="r" style="font-size:12px">${fmtPct(ratio(p.クリック数,y?.クリック数))}</td>
@@ -4099,6 +4143,7 @@ function _paTable(tbodyId, base, cmp){
     const GL2='border-left:2px solid rgba(0,0,0,.08)';
     return`<tr class="prod-row${isSel?' ri-sel':''}" onclick="selectProdItem('${safek}',this)" style="cursor:pointer">
       <td class="mono" style="font-size:12px;position:sticky;left:0;background:#fff">${_idLink(k)}</td>
+      ${_idLinkCol(k)}
       <td class="r mono" style="${GL2};color:var(--blue);font-weight:700">${N(b.売上)}</td>
       <td class="r mono">${N(c.売上)}</td>
       <td class="r" style="font-size:11px">${pctCmp(b.売上,c.売上)}</td>
@@ -4152,7 +4197,7 @@ function _renderDormantProds(baseYM, cmpYM){
   const tb=document.getElementById('tbl-dormant');
   const summary=document.getElementById('dormant-summary');
   if(!tb)return;
-  if(!pa.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:20px">商品分析データを読み込んでください</td></tr>';return;}
+  if(!pa.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:20px">商品分析データを読み込んでください</td></tr>';return;}
 
   const N=v=>Math.round(v||0).toLocaleString('ja-JP');
 
@@ -4194,7 +4239,7 @@ function _renderDormantProds(baseYM, cmpYM){
   window._dormantCache={rows:dormant,baseYM,cmpYM};
 
   if(!dormant.length){
-    tb.innerHTML=`<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:20px">
+    tb.innerHTML=`<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:20px">
       ${cmpYM}に売れていて${baseYM}に売上ゼロの商品はありません</td></tr>`;
     if(summary)summary.innerHTML='';
     return;
@@ -4211,6 +4256,7 @@ function _renderDormantProds(baseYM, cmpYM){
 
   tb.innerHTML=dormant.map(r=>`<tr>
     <td class="mono" style="font-size:11px;font-weight:600;color:var(--text)">${_idLink(r.id)}</td>
+    ${_idLinkCol(r.id)}
     <td class="r mono" style="color:var(--text2)">¥${N(r.cmpSl)}</td>
     <td class="r mono">${N(r.cmpOrders)}</td>
     <td class="r mono" style="color:var(--red);font-weight:700">¥0</td>
@@ -4373,7 +4419,7 @@ function _normalizeId(id){
 
 function renderProd(){
   const pa=D.prodAnalysis||[];
-  if(!pa.length){document.getElementById('tbl-prod').innerHTML='<tr><td colspan="17" style="text-align:center;color:var(--text3);padding:24px">商品分析シートを読み込んでください</td></tr>';return;}
+  if(!pa.length){document.getElementById('tbl-prod').innerHTML='<tr><td colspan="18" style="text-align:center;color:var(--text3);padding:24px">商品分析シートを読み込んでください</td></tr>';return;}
   if(!document.getElementById('prod-base').value)initProdControls();
   const base=document.getElementById('prod-base').value;
   const cmp=document.getElementById('prod-cmp-sel').value||'';
@@ -4389,6 +4435,7 @@ function renderProd(){
   /* 2行ヘッダー: 上段=グループ名, 下段=ソート対象列 */
   if(r1){r1.innerHTML=`
     <th rowspan="2" style="vertical-align:middle;position:sticky;left:0;z-index:5;background:var(--blue)">商品管理番号</th>
+    <th class="item-link-col-h" rowspan="2" style="vertical-align:middle;background:var(--blue)">商品ページ</th>
     <th colspan="4" style="${GH};${GL}">売上</th>
     <th colspan="4" style="${GH};${GL}">アクセス人数</th>
     <th colspan="4" style="${GH};${GL}">転換率</th>
@@ -4968,7 +5015,7 @@ function renderRppKw(){
   const items=D.rppKw||[];
   if(!items.length){
     const tb=document.getElementById('tbl-rpp-kw');
-    if(tb)tb.innerHTML='<tr><td colspan="20" style="text-align:center;color:var(--text3);padding:28px">RPP Keywordシートを含むXLSXを読み込んでください</td></tr>';
+    if(tb)tb.innerHTML='<tr><td colspan="21" style="text-align:center;color:var(--text3);padding:28px">RPP Keywordシートを含むXLSXを読み込んでください</td></tr>';
     return;
   }
   const ySel=document.getElementById('kw-item-year');
@@ -4986,6 +5033,7 @@ function renderRppKw(){
   const _GH='border-bottom:1px solid rgba(255,255,255,.25);text-align:center';
   if(_kh1)_kh1.innerHTML=`
     <th rowspan="2" style="vertical-align:middle;position:sticky;left:0;z-index:5;background:var(--blue)">商品管理番号</th>
+    <th class="item-link-col-h" rowspan="2" style="vertical-align:middle;background:var(--blue)">商品ページ</th>
     <th rowspan="2" style="vertical-align:middle">キーワード</th>
     <th colspan="3" style="${_GH};${_GL}">クリック数</th>
     <th colspan="3" style="${_GH};${_GL}">CVR</th>
@@ -5051,6 +5099,7 @@ function renderRppKw(){
       rows.push('<tr class="prod-row'+(selectedRppKwId===p.k?' ri-sel':'')+'"'
         +' onclick="selectRppKw(\''+safeK+'\',this)">'
         +'<td class="mono" style="font-size:11px;position:sticky;left:0;background:#fff">'+(p.itemId?_idLink(p.itemId):'—')+'</td>'
+        +(p.itemId?_idLinkCol(p.itemId):'<td class="item-link-col-cell"></td>')
         +'<td class="mono" style="font-size:11px">'+p.kw+'</td>'
       +'<td class="r mono" style="'+GL3+';font-size:13px">'+N_kw(p.cl)+'</td><td class="r mono" style="font-size:12px;color:var(--text3)">'+(y?N_kw(y.cl):'—')+'</td><td class="r" style="font-size:12px">'+fP(ratio(p.cl,y&&y.cl))+'</td>'
       +'<td class="r mono" style="'+GL3+';font-size:13px">'+P_kw(p.CVR)+'</td><td class="r mono" style="font-size:12px;color:var(--text3)">'+(y?P_kw(y.CVR):'—')+'</td><td class="r" style="font-size:12px">'+fP(ratio(p.CVR,y&&y.CVR))+'</td>'
@@ -6653,7 +6702,7 @@ function renderRppItemType(){
   const rppKw=D.rppKw||[];
   const tb=document.getElementById('tbl-rppit');
   if(!rppItem.length){
-    if(tb)tb.innerHTML='<tr><td colspan="10" style="text-align:center;color:var(--text3);padding:28px">RPP ItemシートとRPP KWシートを含むXLSXを読み込んでください</td></tr>';
+    if(tb)tb.innerHTML='<tr><td colspan="11" style="text-align:center;color:var(--text3);padding:28px">RPP ItemシートとRPP KWシートを含むXLSXを読み込んでください</td></tr>';
     return;
   }
   const selYM=document.getElementById('rppit-ym')?.value||'';
@@ -6711,7 +6760,8 @@ function renderRppItemType(){
       const btop=ti===0&&pi>0?'border-top:2px solid var(--border)':'';
       rows.push(`<tr class="prod-row${isSel?' ri-sel':''}" style="cursor:pointer;${fw}${btop?';'+btop:''}"
         onclick="selectRppItemType('${safeProd}','${safeLabel}',this)">
-        <td class="mono" style="font-size:11px;position:sticky;left:0;background:${rowBg};${fw};color:${ti===0?'var(--text)':'var(--text3)'}">${ti===0?_idLink(prodId):prodId}</td>
+        <td class="mono" style="font-size:11px;position:sticky;left:0;background:${rowBg};${fw};color:${ti===0?'var(--text)':'var(--text3)'}">${_idLink(prodId)}</td>
+        ${ti===0?_idLinkCol(prodId):'<td class="item-link-col-cell"></td>'}
         <td style="font-size:11px"><span style="color:${typeColors[label]||'#333'};font-weight:600">${label}</span></td>
         <td class="r mono" style="${GL}">${N(d.クリック数)}</td>
         <td class="r mono">${fP(d.CTR)}</td>
@@ -7255,7 +7305,7 @@ function initRppKwSel23(){
 function renderRppKw23(){
   const items=D.rppKw||[];
   const tb=document.getElementById('tbl-rpp-kw23');
-  if(!items.length){if(tb)tb.innerHTML='<tr><td colspan="21" style="text-align:center;color:var(--text3);padding:28px">RPP Keywordシートを含むXLSXを読み込んでください</td></tr>';return;}
+  if(!items.length){if(tb)tb.innerHTML='<tr><td colspan="22" style="text-align:center;color:var(--text3);padding:28px">RPP Keywordシートを含むXLSXを読み込んでください</td></tr>';return;}
   _rk23BuildProdCheckboxes(items);
 
   const selY=document.getElementById('kw23-base-year')?.value||'';
@@ -7271,6 +7321,7 @@ function renderRppKw23(){
   const GH='text-align:center;border-bottom:1px solid rgba(255,255,255,.25)';
   const ST='position:sticky;top:28px;z-index:2;background:var(--blue)';
   if(h1)h1.innerHTML=`<th rowspan="2" style="vertical-align:middle;position:sticky;top:0;left:0;z-index:6;background:var(--blue)">商品管理番号</th>
+    <th class="item-link-col-h" rowspan="2" style="vertical-align:middle;position:sticky;top:0;z-index:3;background:var(--blue)">商品ページ</th>
     <th rowspan="2" style="vertical-align:middle;position:sticky;top:0;z-index:3">キーワード</th>
     <th rowspan="2" style="vertical-align:middle;position:sticky;top:0;z-index:3;min-width:52px">分類</th>
     <th colspan="3" style="${GH};${GL}">クリック数</th><th colspan="3" style="${GH};${GL}">CVR</th>
@@ -7303,6 +7354,7 @@ function renderRppKw23(){
     const color=isBranded?'#F59E0B':'#3B82F6',label=isBranded?'指名':'一般',sel=(_rk23SelId===p.k);
     return '<tr class="rk23-row'+(sel?' ri-sel':'')+'" onclick="selectRkRow23(\''+safeK+'\',this)" style="cursor:pointer">'
       +'<td class="mono" style="font-size:11px;position:sticky;left:0;background:#fff;z-index:2">'+(p.id?_idLink(p.id):'—')+'</td>'
+      +(p.id?_idLinkCol(p.id):'<td class="item-link-col-cell"></td>')
       +'<td class="mono" style="font-size:11px">'+p.kw+'</td>'
       +'<td style="text-align:center"><span style="display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;background:'+color+'22;color:'+color+'">'+label+'</span></td>'
       +_rk23Cells(p,y,GL3,N,P,fP,ratio);
@@ -7319,6 +7371,7 @@ function renderRppKw23(){
     const sel=(_rk23SelId==='__agg__'+typeKey);
     return '<tr class="rk23-row'+(sel?' ri-sel':'')+'" onclick="_rk23ClickAgg(\''+typeKey+'\',\''+uid+'\',this)" style="cursor:pointer;background:'+color+'0D;font-weight:600">'
       +'<td class="mono" style="font-size:11px;position:sticky;left:0;background:'+color+'0D;z-index:2;color:'+color+'">合計</td>'
+      +'<td class="item-link-col-cell"></td>'
       +'<td class="mono" style="font-size:12px;color:'+color+';font-weight:700">'+label+'<span style="font-size:10px;font-weight:400;color:var(--text3);margin-left:6px">'+prods.length+'KW</span>'
         +'<span id="'+uid+'-icon" style="margin-left:8px;font-size:10px;color:var(--text3)">▶ 内訳を見る</span></td>'
       +'<td></td>'
@@ -7341,7 +7394,7 @@ function renderRppKw23(){
   const branded=Object.values(cur).filter(r=>_rk23IsNamed(r.kw)).sort((a,b)=>b.sl-a.sl);
 
   function secHeader(label,color,count){
-    return '<tr style="background:'+color+'11"><td colspan="21" style="padding:6px 14px;font-size:11px;font-weight:700;color:'+color+';border-top:2px solid '+color+'40">'
+    return '<tr style="background:'+color+'11"><td colspan="22" style="padding:6px 14px;font-size:11px;font-weight:700;color:'+color+';border-top:2px solid '+color+'40">'
       +'<span style="display:inline-block;width:10px;height:10px;background:'+color+';border-radius:2px;margin-right:6px;vertical-align:middle"></span>'
       +label+'<span style="font-weight:400;color:var(--text3);margin-left:6px">'+count+'件</span></td></tr>';
   }
@@ -7354,7 +7407,7 @@ function renderRppKw23(){
     general.forEach(p=>rows.push(
       buildRow(p,false).replace('<tr class="rk23-row','<tr data-acc="gen23acc" class="rk23-gen-detail rk23-row').replace('style="cursor:pointer"','style="cursor:pointer;display:none;background:#EFF6FF"')
     ));
-  } else rows.push('<tr><td colspan="21" style="padding:10px 20px;color:var(--text3);font-size:12px">指名語句を設定してください</td></tr>');
+  } else rows.push('<tr><td colspan="22" style="padding:10px 20px;color:var(--text3);font-size:12px">指名語句を設定してください</td></tr>');
 
   /* 指名 */
   rows.push(secHeader('指名キーワード','#F59E0B',branded.length));
@@ -7363,7 +7416,7 @@ function renderRppKw23(){
     branded.forEach(p=>rows.push(
       buildRow(p,true).replace('<tr class="rk23-row','<tr data-acc="brd23acc" class="rk23-brd-detail rk23-row').replace('style="cursor:pointer"','style="cursor:pointer;display:none;background:#FFFBEB"')
     ));
-  } else rows.push('<tr><td colspan="21" style="padding:10px 20px;color:var(--text3);font-size:12px">指名語句を設定してください</td></tr>');
+  } else rows.push('<tr><td colspan="22" style="padding:10px 20px;color:var(--text3);font-size:12px">指名語句を設定してください</td></tr>');
 
   if(tb)tb.innerHTML=rows.join('');
   _tblSortInit('tbl-rpp-kw23-wrap');
@@ -7541,7 +7594,7 @@ function initP24(){
 function renderP24(){
   const pa=D.prodAnalysis||[], rppItems=D.rppItem||[];
   const tb=document.getElementById('tbl-p24-body');
-  if(!pa.length){if(tb)tb.innerHTML='<tr><td colspan="11" style="text-align:center;color:var(--text3);padding:24px">商品分析シートを読み込んでください</td></tr>';return;}
+  if(!pa.length){if(tb)tb.innerHTML='<tr><td colspan="12" style="text-align:center;color:var(--text3);padding:24px">商品分析シートを読み込んでください</td></tr>';return;}
   const ym=document.getElementById('p24-ym')?.value||'';
   const limit=parseInt(document.getElementById('p24-limit')?.value||'20');
   const N=v=>Math.round(v||0).toLocaleString('ja-JP');
@@ -7587,6 +7640,7 @@ function renderP24(){
       const roasColor=r.roas>=300?'var(--green)':r.roas>0?'var(--red)':'var(--text3)';
       return`<tr>
         <td class="mono" style="font-size:11px;font-weight:600">${_idLink(r.id)}</td>
+        ${_idLinkCol(r.id)}
         <td class="r mono">${N(r.acc)}</td>
         <td class="r mono" style="color:var(--blue);font-weight:600">${N(r.rppCl)}</td>
         <td class="r mono" style="color:#10B981;font-weight:600">${N(r.natural)}</td>
@@ -7706,6 +7760,7 @@ function renderP25(){
   if(tb){
     tb.innerHTML=prods.map(p=>`<tr>
       <td class="mono" style="font-size:11px;font-weight:600">${_idLink(p.id)}</td>
+      ${_idLinkCol(p.id)}
       <td class="r mono" style="color:var(--blue);font-weight:700">${N(p.rv)}</td>
       <td class="r mono" style="color:${p.cvr>=3?'var(--green)':p.cvr>=1?'var(--text)':'var(--red)'}">${p.cvr.toFixed(2)}%</td>
       <td class="r mono">${N(Math.round(p.avgAcc))}</td>
@@ -7802,6 +7857,7 @@ function _p26RenderTable(){
   tb.innerHTML=sorted.map(v=>`<tr>
     <td><span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;background:${qColor[v.quad]}22;color:${qColor[v.quad]}">${qLabel[v.quad]}</span></td>
     <td class="mono" style="font-size:11px">${_idLink(v.id)}</td>
+    ${_idLinkCol(v.id)}
     <td class="mono" style="font-size:11px">${v.kw}</td>
     <td class="r mono" style="color:${v.roas>=500?'var(--green)':'var(--red)'};font-weight:700">${Math.round(v.roas)}%</td>
     <td class="r mono" style="color:var(--blue);font-weight:600">¥${N(v.sl)}</td>
