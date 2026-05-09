@@ -134,6 +134,15 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
 .item-link-ico:hover{background:var(--blue);color:#fff;transform:translateY(-1px);box-shadow:0 2px 4px rgba(20,98,212,.25)}
 .item-link-ico:active{transform:translateY(0)}
 
+/* ─ 店舗ID 複合入力 ─ */
+.shop-id-wrap{display:inline-flex;align-items:stretch;border:1px solid var(--border);border-radius:5px;background:#fff;overflow:hidden;font-size:11px;line-height:1.4}
+.shop-id-wrap:focus-within{border-color:var(--blue);box-shadow:0 0 0 2px rgba(20,98,212,.12)}
+.shop-id-pre,.shop-id-suf{padding:4px 8px;color:var(--text3);background:#F4F6FB;font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;white-space:nowrap;user-select:none}
+.shop-id-pre{border-right:1px solid var(--border)}
+.shop-id-suf{border-left:1px solid var(--border)}
+.shop-id-wrap input{padding:4px 8px;border:0;font-size:11px;font-family:inherit;width:140px;background:#fff;outline:none;color:var(--text)}
+.shop-id-wrap input::placeholder{color:var(--text3)}
+
 /* ─ Range Slider ─ */
 
 /* ─ デュアルハンドル レンジスライダー ─ */
@@ -501,8 +510,8 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
       <select id="prod-cat" onchange="renderProd()"></select>
     </div>
     <div class="ctrl-group">
-      <label>ショップURL</label>
-      <input type="text" id="prod-shop-url" placeholder="https://item.rakuten.co.jp/shop-id/" style="padding:4px 8px;border:1px solid var(--border);border-radius:5px;font-size:11px;font-family:inherit;width:280px;background:#fff" oninput="renderProd()">
+      <label>店舗ID</label>
+      <div class="shop-id-wrap"><span class="shop-id-pre">https://item.rakuten.co.jp/</span><input type="text" id="prod-shop-url" placeholder="店舗ID" oninput="renderProd()"><span class="shop-id-suf">/</span></div>
     </div>
   </div>
   <div class="sec" style="padding:0;overflow:hidden;margin-bottom:14px">
@@ -998,8 +1007,8 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text
       <select id="ri-cmp-month" onchange="renderRppItem()"></select>
     </div>
     <div class="ctrl-group">
-      <label>ショップURL</label>
-      <input type="text" id="ri-shop-url" placeholder="https://item.rakuten.co.jp/shop-id/" style="padding:4px 8px;border:1px solid var(--border);border-radius:5px;font-size:11px;font-family:inherit;width:280px;background:#fff" oninput="renderRppItem()">
+      <label>店舗ID</label>
+      <div class="shop-id-wrap"><span class="shop-id-pre">https://item.rakuten.co.jp/</span><input type="text" id="ri-shop-url" placeholder="店舗ID" oninput="renderRppItem()"><span class="shop-id-suf">/</span></div>
     </div>
     <div style="margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)">
       選択中：<strong id="rpp-item-selected" style="color:var(--blue);font-family:'IBM Plex Mono',monospace;font-size:11px">—</strong>
@@ -2256,33 +2265,42 @@ function mk(id,cfg){if(CHS[id])CHS[id].destroy();try{CHS[id]=new Chart(document.
 const YC={'2023':'#F59E0B','2024':'#EF4444','2025':'#06B6D4','2026':'#10B981'};
 const MONTHS=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
 
-/* ── 商品ページ遷移リンク（楽天ショップURL） ── */
+/* ── 商品ページ遷移リンク（楽天店舗ID） ── */
 const SHOP_URL_KEY='cs_rakuten_shop_base_url';
-function _normalizeShopBase(u){
-  const v=(u||'').trim();
+const RAKUTEN_BASE='https://item.rakuten.co.jp/';
+function _normalizeShopId(input){
+  const v=(input||'').trim();
   if(!v)return '';
-  return v.replace(/\/+$/,'');
+  // フルURLが貼られた場合は店舗IDだけ抽出
+  const m=v.match(/^https?:\/\/item\.rakuten\.co\.jp\/([^\/\?#\s]+)/i);
+  if(m)return m[1];
+  // それ以外の場合は前後の / を削って先頭セグメントだけ
+  return v.replace(/^\/+|\/+$/g,'').split('/')[0];
 }
-function _getShopBase(){
+function _getShopId(){
   try{
     const saved=localStorage.getItem(SHOP_URL_KEY);
-    if(saved&&saved.trim())return _normalizeShopBase(saved);
+    if(saved&&saved.trim())return _normalizeShopId(saved);
   }catch(e){}
   const a=document.getElementById('prod-shop-url')?.value;
-  if(a&&a.trim())return _normalizeShopBase(a);
+  if(a&&a.trim())return _normalizeShopId(a);
   const b=document.getElementById('ri-shop-url')?.value;
-  if(b&&b.trim())return _normalizeShopBase(b);
+  if(b&&b.trim())return _normalizeShopId(b);
   return '';
 }
-function _setShopBase(url){
-  const v=_normalizeShopBase(url);
+function _getShopBase(){
+  const id=_getShopId();
+  return id?RAKUTEN_BASE+id:'';
+}
+function _setShopBase(input){
+  const id=_normalizeShopId(input);
   try{
-    if(v)localStorage.setItem(SHOP_URL_KEY,v);
+    if(id)localStorage.setItem(SHOP_URL_KEY,id);
     else localStorage.removeItem(SHOP_URL_KEY);
   }catch(e){}
-  ['prod-shop-url','ri-shop-url'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el&&el.value!==v)el.value=v;
+  ['prod-shop-url','ri-shop-url'].forEach(elId=>{
+    const el=document.getElementById(elId);
+    if(el&&el.value!==id)el.value=id;
   });
 }
 function _idLink(id){
@@ -2301,6 +2319,12 @@ function _refreshAllProdTables(){
 function _initShopUrlSync(){
   let saved='';
   try{saved=localStorage.getItem(SHOP_URL_KEY)||'';}catch(e){}
+  // 旧形式（フルURL）が保存されていれば店舗IDに移行
+  if(saved){
+    const id=_normalizeShopId(saved);
+    if(id&&id!==saved){try{localStorage.setItem(SHOP_URL_KEY,id);}catch(e){}}
+    saved=id;
+  }
   if(saved){
     ['prod-shop-url','ri-shop-url'].forEach(id=>{
       const el=document.getElementById(id);
@@ -2313,6 +2337,13 @@ function _initShopUrlSync(){
     el.dataset.shopSyncBound='1';
     el.addEventListener('input',function(){
       _setShopBase(el.value);
+      _refreshAllProdTables();
+    });
+    // フルURLが貼り付けられたら店舗IDに自動補正
+    el.addEventListener('blur',function(){
+      const id=_normalizeShopId(el.value);
+      if(id!==el.value)el.value=id;
+      _setShopBase(id);
       _refreshAllProdTables();
     });
   });
